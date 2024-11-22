@@ -84,7 +84,7 @@ Refer to the [CHANGELOG](CHANGELOG.md) file.
 
 6. Create a staging issuer (email addresses with the suffix `example.com` are forbidden).
 
-   See [letsencrypt-staging-issuer.yaml](examples/issuers/letsencrypt-staging-issuer.yaml)
+   See [letsencrypt-staging-issuer.yaml](examples/issuers/letsencrypt-staging-issuer.yaml) or [letsencrypt-staging-issuer-pat.yaml](examples/issuers/letsencrypt-staging-issuer-pat.yaml) if you use PAT.
 
    Don't forget to replace email `invalid@example.com`.
 
@@ -92,7 +92,7 @@ Refer to the [CHANGELOG](CHANGELOG.md) file.
 
         kubectl describe issuer letsencrypt-staging
 
-   You can deploy a ClusterIssuer instead : see [letsencrypt-staging-clusterissuer.yaml](examples/issuers/letsencrypt-staging-clusterissuer.yaml)
+   You can deploy a ClusterIssuer instead : see [letsencrypt-staging-clusterissuer.yaml](examples/issuers/letsencrypt-staging-clusterissuer.yaml) or [letsencrypt-staging-clusterissuer-pat.yaml](examples/issuers/letsencrypt-staging-clusterissueri-pat.yaml) if you use PAT.
 
    *Note*: The production Issuer is [similar][ACME documentation].
 
