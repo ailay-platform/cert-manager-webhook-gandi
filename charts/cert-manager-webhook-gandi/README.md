@@ -38,6 +38,8 @@ helm install cert-manager-webhook-gandi cert-manager-webhook-gandi/cert-manager-
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"ghcr.io/sintef/cert-manager-webhook-gandi"` | Image name |
 | image.tag | string | `""` | Image tag (default to Chart's appVersion) |
+| image.pullSecrets | list | `[]` | Image pull secrets |
+| replicaCount | int | `1` | Number of replicas |
 | logLevel | int | `2` | Verbosity of the logs. Set to 6 for verbose logs. |
 | nameOverride | string | `""` | Set to override the name |
 | nodeSelector | object | `{}` |  |
