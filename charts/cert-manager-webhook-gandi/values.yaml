@@ -37,3 +37,5 @@ affinity: {}
 # -- To not store it in plain text, use sops or similar.
 # -- The secret is not created if not set.
 gandiApiToken: ""
+# -- Image pull secrets
+imagePullSecrets: []
