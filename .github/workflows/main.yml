@@ -91,3 +91,12 @@ jobs:
           build-args: GO_VERSION=${{ steps.versions.outputs.go_version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Set package visibility to public
+        run: |
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GHA_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/orgs/ailay-platform/packages/container/cert-manager-webhook-gandi \
+            -d '{"visibility":"public"}'
