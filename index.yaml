@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  cert-manager-webhook-gandi:
+  - apiVersion: v2
+    appVersion: 0.6.5
+    created: "2026-05-27T10:28:40.509209568Z"
+    description: A Helm chart for cert-manager-webhook-gandi
+    digest: 1c8973e1d9e89da59d316ef51dff4e78354d4eac16eae98878dcc80c8953fed4
+    name: cert-manager-webhook-gandi
+    urls:
+    - https://github.com/ailay-platform/cert-manager-webhook-gandi/releases/download/cert-manager-webhook-gandi-v0.6.5/cert-manager-webhook-gandi-v0.6.5.tgz
+    version: v0.6.5
+generated: "2026-05-27T10:28:40.509216978Z"
