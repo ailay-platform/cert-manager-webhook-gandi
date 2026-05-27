@@ -35,12 +35,6 @@ jobs:
         with:
           go-version: ${{ steps.versions.outputs.go_version }}
 
-      - name: Install kubebuilder test assets
-        run: |
-          go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
-          ASSETS=$(setup-envtest use --bin-dir /tmp/kubebuilder -p path)
-          echo "KUBEBUILDER_ASSETS=${ASSETS}" >> $GITHUB_ENV
-
       - name: Run tests
         run: go test ./...
         env:
