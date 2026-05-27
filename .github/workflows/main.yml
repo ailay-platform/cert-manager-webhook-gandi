@@ -35,8 +35,17 @@ jobs:
         with:
           go-version: ${{ steps.versions.outputs.go_version }}
 
+      - name: Install kubebuilder test assets
+        run: |
+          go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
+          ASSETS=$(setup-envtest use --bin-dir /tmp/kubebuilder -p path)
+          echo "TEST_ASSET_ETCD=${ASSETS}/etcd" >> $GITHUB_ENV
+          echo "TEST_ASSET_KUBE_APISERVER=${ASSETS}/kube-apiserver" >> $GITHUB_ENV
+
       - name: Run tests
         run: go test ./...
+        env:
+          TEST_ZONE_NAME: ${{ secrets.TEST_ZONE_NAME }}
 
   build-and-push-image:
     name: Build and push Docker image
@@ -77,7 +86,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           build-args: GO_VERSION=${{ steps.versions.outputs.go_version }}
           tags: ${{ steps.meta.outputs.tags }}
