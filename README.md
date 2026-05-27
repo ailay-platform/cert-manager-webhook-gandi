@@ -1,15 +1,15 @@
-# ACME webhook for Gandi (SINTEF fork)
+# ACME webhook for Gandi (ailay-platform fork)
 
 `cert-manager-webhook-gandi` is an ACME webhook for [cert-manager]. It provides an ACME (read: Let's Encrypt) webhook for [cert-manager], which allows to use a `DNS-01` challenge with [Gandi]. This allows to provide Let's Encrypt certificates to [Kubernetes] for service protocols other than HTTP and furthermore to request wildcard certificates. Internally it uses the [Gandi LiveDNS API] to communicate with Gandi.
 
 ## What does the fork do?
 
-This repository is a fork of [bwolf/cert-manager-webhook-gandi] with the following changes:
+This repository is a fork of [SINTEF/cert-manager-webhook-gandi] with the following changes:
 
+- Fixed multi-level TLD support (`.com.au`, `.co.uk`, `.com.br`, etc.) — uses `ch.ResolvedZone` directly instead of a last-2-parts heuristic that broke 3-part TLDs
 - The dependencies have been updated to newer versions
-- A few pending pull requests on the upstream repository have been merged
-- The software container image is hosted on GitHub
-- The Helm chart is hosted on GitHub
+- The container image is published publicly to GHCR (`ghcr.io/ailay-platform/cert-manager-webhook-gandi`)
+- The Helm chart is hosted on GitHub Pages (`https://ailay-platform.github.io/cert-manager-webhook-gandi`)
 - Secret handled in the Helm Chart (SOPS is recommended to save the secrets).
 
 ## Helm chart
@@ -32,7 +32,7 @@ Build the container image `cert-manager-webhook-gandi:latest`:
 
 Ready made images are hosted on Docker Hub ([image tags]). Use at your own risk:
 
-    ghcr.io/sintef/cert-manager-webhook-gandi
+    ghcr.io/ailay-platform/cert-manager-webhook-gandi
 
 ### Release History
 
@@ -72,7 +72,7 @@ Refer to the [CHANGELOG](CHANGELOG.md) file.
 
    *The `features.apiPriorityAndFairness` argument must be removed or set to `false` for Kubernetes older than 1.20.*
 
-        helm repo add cert-manager-webhook-gandi https://sintef.github.io/cert-manager-webhook-gandi
+        helm repo add cert-manager-webhook-gandi https://ailay-platform.github.io/cert-manager-webhook-gandi
 
         helm install cert-manager-webhook-gandi cert-manager-webhook-gandi/cert-manager-webhook-gandi \
             --set gandiApiToken=<GANDI-API-KEY>
@@ -170,7 +170,8 @@ make clean
 [Gandi]: https://gandi.net/
 [Gandi LiveDNS API]: https://api.gandi.net/docs/livedns/
 [Helm]: https://helm.sh
-[image tags]: https://hub.docker.com/r/bwolf/cert-manager-webhook-gandi
+[image tags]: https://github.com/ailay-platform/cert-manager-webhook-gandi/pkgs/container/cert-manager-webhook-gandi
+[SINTEF/cert-manager-webhook-gandi]: https://github.com/SINTEF/cert-manager-webhook-gandi
 [Kubernetes]: https://kubernetes.io/
 [setting-nameservers-for-dns01-self-check]: https://cert-manager.io/docs/configuration/acme/dns01/#setting-nameservers-for-dns01-self-check
 [cert-manager-uninstall]: https://cert-manager.io/docs/installation/uninstall/kubernetes/
