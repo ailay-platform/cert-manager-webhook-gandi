@@ -12,9 +12,9 @@ var (
 )
 
 func TestRunsSuite(t *testing.T) {
-	// The manifest path should contain a file named config.json that is a
-	// snippet of valid configuration that should be included on the
-	// ChallengeRequest passed as part of the test cases.
+	if zone == "" {
+		t.Skip("TEST_ZONE_NAME not set — skipping integration tests")
+	}
 
 	solver := &gandiDNSProviderSolver{}
 	fixture := acmetest.NewFixture(solver,
