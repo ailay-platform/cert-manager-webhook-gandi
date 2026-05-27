@@ -85,10 +85,11 @@ func (c *gandiDNSProviderSolver) Name() string {
 }
 
 func extractRootAndSubDomain(fqdn string, entry string) (string, string, error) {
-	parts := strings.Split(strings.Trim(fqdn, "."), ".")
-	domain := parts[len(parts)-2] + "." + parts[len(parts)-1]
-
-	return domain, strings.Join(append([]string{strings.Trim(entry, ".")}, parts[0:len(parts)-2]...), "."), nil
+	// getDomainAndEntry already resolves the correct zone via ch.ResolvedZone,
+	// so fqdn is the full zone (e.g. "beyond-suite.com.au") and entry is the
+	// subdomain (e.g. "_acme-challenge"). The previous last-2-parts heuristic
+	// broke multi-level TLDs like .com.au, .co.uk, .com.br, etc.
+	return fqdn, entry, nil
 }
 
 // Present is responsible for actually presenting the DNS record with the

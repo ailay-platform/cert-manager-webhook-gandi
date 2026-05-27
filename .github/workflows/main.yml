@@ -7,19 +7,48 @@ on:
       - dev
     tags:
       - "*"
+  pull_request:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: sintef/cert-manager-webhook-gandi
+  IMAGE_NAME: ailay-platform/cert-manager-webhook-gandi
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Get Go version
+        id: versions
+        run: |
+          echo go_version=$(go mod edit -json | grep -Po '"Go":\s+"([0-9.]+)"' | sed -E 's/.+"([0-9.]+)"/\1/') >> $GITHUB_OUTPUT
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ steps.versions.outputs.go_version }}
+
+      - name: Run tests
+        run: go test ./...
+
   build-and-push-image:
     name: Build and push Docker image
     runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name != 'pull_request'
 
     permissions:
       contents: read
       packages: write
+      # needed to set package visibility
+      actions: read
 
     steps:
       - name: Check out repo
@@ -30,14 +59,14 @@ jobs:
         run: |
           echo go_version=$(go mod edit -json | grep -Po '"Go":\s+"([0-9.]+)"' | sed -E 's/.+"([0-9.]+)"/\1/') >> $GITHUB_OUTPUT
 
-      - name: Login to Docker Hub
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for pre process image
+      - name: Extract metadata (tags, labels) for Docker image
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -55,3 +84,11 @@ jobs:
           build-args: GO_VERSION=${{ steps.versions.outputs.go_version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Set package visibility to public
+        run: |
+          gh api --method PATCH \
+            /orgs/ailay-platform/packages/container/cert-manager-webhook-gandi \
+            -f visibility=public || true
+        env:
+          GH_TOKEN: ${{ secrets.GHA_TOKEN }}
